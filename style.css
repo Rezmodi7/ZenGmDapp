@@ -1,0 +1,32 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: url("assets/bg.jpg") no-repeat center center fixed;
+  background-size: cover;
+  color: #fff;
+  text-align: center;
+}
+
+.app {
+  background: rgba(0, 0, 0, 0.6);
+  margin: auto;
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 500px;
+}
+
+button {
+  padding: 10px 20px;
+  margin: 10px;
+  border: none;
+  border-radius: 8px;
+  background-color: #ff9800;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:disabled {
+  background-color: #777;
+  cursor: not-allowed;
+}
