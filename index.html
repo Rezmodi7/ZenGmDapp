@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZenChain GM DApp</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+</head>
+<body>
+  <div class="app">
+    <h1>ZenChain GM DApp</h1>
+    <button id="connectBtn">Connect Wallet</button>
+
+    <div id="mainUI" style="display:none;">
+      <p><strong>Connected:</strong> <span id="userAddress"></span></p>
+
+      <button id="gmBtn">GM</button>
+      <p id="countdown"></p>
+      <p>Total GM count: <span id="gmCount">0</span></p>
+
+      <h2>Recent GMs</h2>
+      <ul id="recentList"></ul>
+
+      <button id="faucetBtn">Get Faucet</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
