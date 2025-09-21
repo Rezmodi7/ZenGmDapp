@@ -1,18 +1,22 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: url("assets/bg.png") no-repeat center center fixed;
+  height: 100vh;
+  background: url("assets/bg.jpg") no-repeat center center fixed;
   background-size: cover;
   color: #fff;
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .app {
   background: rgba(0, 0, 0, 0.6);
-  margin: auto;
   padding: 20px;
   border-radius: 12px;
   max-width: 500px;
+  width: 90%;
 }
 
 button {
@@ -20,7 +24,7 @@ button {
   margin: 10px;
   border: none;
   border-radius: 8px;
-  background-color: #4caf50; /* سبز چمنی ملایم */
+  background-color: #4CAF50;
   color: white;
   font-size: 16px;
   cursor: pointer;
@@ -31,17 +35,17 @@ button:disabled {
   cursor: not-allowed;
 }
 
-/* Modal Style */
+/* Modal */
 .modal {
-  display: none;
-  position: fixed;
-  z-index: 1000;
+  display: none; 
+  position: fixed; 
+  z-index: 1000; 
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.8);
+  overflow: auto; 
+  background-color: rgba(0,0,0,0.7);
 }
 
 .modal-content {
@@ -49,19 +53,10 @@ button:disabled {
   margin: 10% auto;
   padding: 20px;
   border-radius: 12px;
-  width: 80%;
+  width: 90%;
   max-width: 500px;
   color: #fff;
-  text-align: left;
-}
-
-.scrollable {
-  max-height: 300px;
-  overflow-y: auto;
-  margin-top: 10px;
-  border: 1px solid #555;
-  padding: 10px;
-  border-radius: 8px;
+  text-align: center;
 }
 
 .close {
@@ -74,4 +69,11 @@ button:disabled {
 
 .close:hover {
   color: #fff;
+}
+
+.scrollable {
+  max-height: 300px;
+  overflow-y: auto;
+  text-align: left;
+  margin-top: 10px;
 }
