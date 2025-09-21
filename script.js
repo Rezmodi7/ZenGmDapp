@@ -234,7 +234,7 @@ const contractABI = [
 		"stateMutability": "view",
 		"type": "function"
 	}
-] ;
+];
 
 let provider, signer, contract;
 let transactions = [];
@@ -244,6 +244,7 @@ const connectBtn = document.getElementById("connectBtn");
 const userAddressEl = document.getElementById("userAddress");
 const gmBtn = document.getElementById("gmBtn");
 const gmCountEl = document.getElementById("gmCount");
+const recentList = document.getElementById("recentList");
 const viewTxBtn = document.getElementById("viewTxBtn");
 const txModal = document.getElementById("txModal");
 const closeModal = document.querySelector(".close");
@@ -261,19 +262,33 @@ function formatTime(ts) {
   return date.toLocaleString();
 }
 
-// Connect Wallet
+// Connect / Disconnect Wallet
+let connected = false;
 connectBtn.onclick = async () => {
-  if (typeof window.ethereum !== "undefined") {
-    provider = new ethers.providers.Web3Provider(window.ethereum);
-    await provider.send("eth_requestAccounts", []);
-    signer = provider.getSigner();
-    const address = await signer.getAddress();
-    userAddressEl.textContent = shortAddress(address);
-    document.getElementById("mainUI").style.display = "block";
-    contract = new ethers.Contract(contractAddress, contractABI, signer);
-    loadData(address);
+  if (!connected) {
+    if (typeof window.ethereum !== "undefined") {
+      provider = new ethers.providers.Web3Provider(window.ethereum);
+      await provider.send("eth_requestAccounts", []);
+      signer = provider.getSigner();
+      const address = await signer.getAddress();
+      userAddressEl.textContent = shortAddress(address);
+      document.getElementById("mainUI").style.display = "block";
+      contract = new ethers.Contract(contractAddress, contractABI, signer);
+      loadData(address);
+      connected = true;
+      connectBtn.textContent = "Disconnect Wallet";
+    } else {
+      alert("MetaMask not detected!");
+    }
   } else {
-    alert("MetaMask not detected!");
+    signer = null;
+    provider = null;
+    contract = null;
+    transactions = [];
+    userAddressEl.textContent = "";
+    document.getElementById("mainUI").style.display = "none";
+    connectBtn.textContent = "Connect Wallet";
+    connected = false;
   }
 };
 
@@ -290,29 +305,25 @@ gmBtn.onclick = async () => {
   }
 };
 
-// Faucet Button
-faucetBtn.onclick = () => {
-  window.open("https://faucet.zenchain.io", "_blank");
-};
-
 // Load Data
 async function loadData(address) {
   const count = await contract.getGMCount(address);
   gmCountEl.textContent = count.toString();
 }
 
+// Faucet Button
+faucetBtn.onclick = () => {
+  window.open("https://faucet.zenchain.io", "_blank");
+};
+
 // Modal Events
-viewTxBtn.onclick = async () => {
+viewTxBtn.onclick = () => {
   txList.innerHTML = "";
-  // Load recent GMs dynamically
-  if (contract && signer) {
-    const recents = await contract.getRecentGMs(20);
-    recents.forEach(r => {
-      const p = document.createElement("p");
-      p.textContent = `${shortAddress(r.user)} - ${formatTime(r.timestamp)}`;
-      txList.appendChild(p);
-    });
-  }
+  transactions.forEach(t => {
+    const p = document.createElement("p");
+    p.textContent = `${shortAddress(t.address)} - ${formatTime(t.timestamp)}`;
+    txList.appendChild(p);
+  });
   txModal.style.display = "block";
 };
 
@@ -325,3 +336,29 @@ window.onclick = (event) => {
     txModal.style.display = "none";
   }
 };
+
+// Countdown Timer (Display only)
+function updateCountdown() {
+  const now = new Date();
+  const utcOffset = 3.5 * 60; // Tehran UTC+3:30 in minutes
+  const tehranTime = new Date(now.getTime() + (utcOffset - now.getTimezoneOffset()) * 60000);
+
+  let nextReset = new Date(tehranTime);
+  const hours = tehranTime.getHours();
+  if (hours < 12) {
+    nextReset.setHours(12, 0, 0, 0);
+  } else {
+    nextReset.setHours(24, 0, 0, 0);
+  }
+
+  const diff = nextReset - tehranTime;
+  const h = Math.floor(diff / 1000 / 3600);
+  const m = Math.floor((diff / 1000 % 3600) / 60);
+  const s = Math.floor(diff / 1000 % 60);
+
+  document.getElementById("countdown").textContent = `Next GM reset in: ${h}h ${m}m ${s}s`;
+}
+
+// Start countdown
+setInterval(updateCountdown, 1000);
+updateCountdown();
